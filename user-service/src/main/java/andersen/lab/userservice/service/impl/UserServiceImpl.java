@@ -26,12 +26,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean checkLogin(User user) {
-        return userRepository.findByEmailAAndPassword(user.getEmail(), user.getPassword()).isPresent();
+        return userRepository.findByEmailAndPassword(user.getEmail(), user.getPassword()).isPresent();
     }
 
     @Override
     public Optional<User> findByEmailAndPassword(String email, String password) {
-        return userRepository.findByEmailAAndPassword(email, password);
+        return userRepository.findByEmailAndPassword(email, password);
     }
 
     public void addToSession(HttpSession session, User user) {

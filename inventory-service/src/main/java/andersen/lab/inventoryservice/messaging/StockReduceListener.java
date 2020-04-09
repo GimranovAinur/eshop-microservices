@@ -1,5 +1,6 @@
 package andersen.lab.inventoryservice.messaging;
 
+import andersen.lab.inventoryservice.config.RabbitMQConfig;
 import andersen.lab.inventoryservice.domain.Item;
 import andersen.lab.inventoryservice.messaging.dto.OrderItemDTO;
 import andersen.lab.inventoryservice.service.InventoryService;
@@ -19,7 +20,7 @@ public class StockReduceListener {
         this.inventoryService = inventoryService;
     }
 
-    @RabbitListener(queues="${jsa.rabbitmq.queue}")
+    @RabbitListener(queues= RabbitMQConfig.QUEUE_NAME)
     public void reduceStock(OrderItemDTO orderItemDTO) {
         Optional<Item> item = inventoryService.getByProductId(orderItemDTO.getProductId());
         item.ifPresent(inventoryItem -> {

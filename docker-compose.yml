@@ -1,73 +1,92 @@
 version: '3'
 
 services:
-  discovery-service:
+  discovery:
     container_name: discovery_container
     build: discovery-server/
     ports:
     - "8761:8761"
+
   user-service:
     container_name: user_container
     build: user-service/
-    links:
-      - db
-      - discovery-service
     depends_on:
-      - discovery-service
+      - discovery
       - db
+      - redis
     ports:
     - "8080:8080"
+    environment:
+      - POSTGRES_HOST=db
+      - SPRING_REDIS_HOST=redis
+
   product-service:
     container_name: product_container
     build: product-service/
-    links:
-      - db
-      - discovery-service
     depends_on:
-      - discovery-service
+      - discovery
       - db
     ports:
       - "8081:8081"
+    environment:
+      - POSTGRES_HOST=db
+
   inventory-service:
     container_name: inventory_container
     build: inventory-service/
     depends_on:
-      - discovery-service
-      - product-service
+      - discovery
+      - rabbitmq
       - db
     ports:
     - "8082:8082"
-  cart-service:
-    container_name: cart_container
-    build: cart-service/
-    depends_on:
-      - discovery-service
-      - product-service
-      - user-service
-      - db
-    ports:
-      - "8083:8083"
-  order-service:
-    container_name: order_container
-    build: order-service/
-    depends_on:
-      - discovery-service
-      - product-service
-      - user-service
-      - db
-    ports:
-      - "8084:8084"
+    environment:
+      - POSTGRES_HOST=db
+      - SPRING_RABBITMQ_HOST=rabbitmq
+
+#  cart-service:
+#    container_name: cart_container
+#    build: cart-service/
+#    depends_on:
+#      - discovery
+#      - redis
+#      - db
+#    ports:
+#      - "8083:8083"
+#    environment:
+#      - POSTGRES_HOST=db
+
+#  order-service:
+#    container_name: order_container
+#    build: order-service/
+#    depends_on:
+#      - discovery
+#      - user-service
+#      - rabbitmq
+#      - db
+#    ports:
+#      - "8084:8084"
+#    environment:
+#      - POSTGRES_HOST=db
+
   redis:
     container_name: redis_container
     image: redis
     ports:
       - "6379:6379"
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq_container
+    ports:
+      - 5672:5672
+
   db:
     container_name: postgres_container
     image: postgres
     restart: always
     ports:
-      - 5432:5432
+      - "5432:5432"
     environment:
       - POSTGRES_PASSWORD=psqlpass
       - POSTGRES_USER=eshop_admin
