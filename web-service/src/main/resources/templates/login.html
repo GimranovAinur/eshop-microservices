@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login</title>
+</head>
+<body>
+<form method="POST" th:action="@{/login}" th:object="${user}" id="loginForm">
+    <h1>Enter email and password</h1>
+    <label for="email">Email: </label>
+    <input type="text" th:field="*{email}" id="email"/>
+    <br/>
+
+    <label for="password">Password: </label>
+    <input type="text" th:field="*{password}" id="password">
+    <br/>
+
+    <input type="submit" value="Авторизоваться"/>
+</form>
+</body>
+</html>

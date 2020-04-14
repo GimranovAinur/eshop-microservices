@@ -1,0 +1,40 @@
+server:
+  port: 8762
+
+spring:
+  application:
+    name:
+      gateway-service
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+zuul:
+  ignored-services: '*'
+  routes:
+    auth-service:
+      path: /api/auth/**
+      serviceId: auth-service
+      url: http://localhost:8080
+    account-service:
+      path: /api/accounts/**
+      serviceId: account-service
+      url: http://localhost:8081
+    product-service:
+      path: /api/products/**
+      serviceId: product-service
+      url: http://localhost:8082
+    inventory-service:
+      path: /api/inventory/**
+      serviceId: inventory-service
+      url: http://localhost:8083
+    cart-service:
+      path: /api/carts/**
+      serviceId: cart-service
+      url: http://localhost:8084
+    order-service:
+      path: /api/order/**
+      serviceId: order-service
+      url: http://localhost:8085

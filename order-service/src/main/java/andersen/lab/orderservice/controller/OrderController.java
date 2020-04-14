@@ -33,7 +33,7 @@ public class OrderController {
     }
 
     @GetMapping
-    public List<Order> list(HttpSession session, HttpServletRequest request) {
+    public List<Order> list(HttpSession session) {
         UserDTO user = userService.getUserFromSession(session);
         return orderService.getUserOrders(user.getId());
     }
